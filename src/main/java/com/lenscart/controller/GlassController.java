@@ -2,6 +2,8 @@ package com.lenscart.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.lenscart.entity.Glass;
+import com.lenscart.exception.IdNotFoundException;
 import com.lenscart.exception.InvalidProductDataException;
+import com.lenscart.exception.NoSuchProductFoundException;
 import com.lenscart.service.IGlassService;
 
 
@@ -35,24 +39,24 @@ public class GlassController {
 		}
 
 		@GetMapping("glass/{glassId}")
-		public ResponseEntity<Glass> getGlassById(@PathVariable("glassId") Integer glassId){
+		public ResponseEntity<Glass> getGlassById(@PathVariable("glassId") int glassId) throws IdNotFoundException{
 			return new ResponseEntity<Glass>(glassService.getGlassById(glassId), HttpStatus.OK);
 		}
 
 		@PostMapping("glass")
-		public ResponseEntity<Glass> addGlass(@RequestBody Glass glass) throws InvalidProductDataException {
+		public ResponseEntity<Glass> addGlass(@Valid @RequestBody Glass glass) throws InvalidProductDataException {
 			glassService.addGlass(glass);
 			return new ResponseEntity<Glass>(glass, HttpStatus.OK);
 		}
 		
 		@DeleteMapping("/glass/{glassId}")
-		public ResponseEntity<List<Glass>> deleteGlass(@PathVariable("glassId")Integer glassId){
-			glassService.deleteGlass(glassId);
-			return new ResponseEntity<>(null, HttpStatus.OK);
+		public ResponseEntity<List<Glass>> deleteGlass(@PathVariable("glassId")int glassId) throws IdNotFoundException {
+			List glassList=glassService.deleteGlass(glassId);
+			return new ResponseEntity<List<Glass>>(glassList, HttpStatus.OK);
 		}
 		
 		@PutMapping("glass")
-		public ResponseEntity<Glass>updateGlass(@RequestBody Glass glass)
+		public ResponseEntity<Glass>updateGlass(@RequestBody Glass glass) throws InvalidProductDataException
 		{
 			return new ResponseEntity<Glass>(glassService.updateGlass(glass), HttpStatus.OK);
 		}

@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 
 @Entity
@@ -16,21 +19,37 @@ public class Glass {
 	@Column(name = "glassId")
 	private int glassId;
 	
+	@NotEmpty(message="Glass name should not be blank.")
 	@Column(name = "glassName")
 	private String glassName;
 	
+	@NotBlank(message="Glass brand should not be blank.")
 	@Column(name = "brand")
 	private String brand;
 	
 	@Column(name = "price")
+	@NotNull(message="Glass Price should not be blank.")
 	private double price;
 	
+	@NotBlank(message="Glass type should not be blank.")
 	@Column(name = "type")
 	private String type;
 	
+
 	@Column(name = "powerRange")
-	private int powerRange;
+	private double powerRange;
 	
+	@Column(name="glassImage")
+	private String glassImage;
+	
+	public String getGlassImage() {
+		return glassImage;
+	}
+
+	public void setGlassImage(String glassImage) {
+		this.glassImage = glassImage;
+	}
+
 	public Glass()
 	{
 		
@@ -76,11 +95,11 @@ public class Glass {
 		this.type = type;
 	}
 
-	public int getPowerRange() {
+	public double getPowerRange() {
 		return powerRange;
 	}
 
-	public void setPowerRange(int powerRange) {
+	public void setPowerRange(double powerRange) {
 		this.powerRange = powerRange;
 	}
 	

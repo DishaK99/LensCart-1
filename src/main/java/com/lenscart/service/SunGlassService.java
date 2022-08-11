@@ -35,11 +35,15 @@ public class SunGlassService implements ISunGlassService {
 
 	@Override
 	public SunGlasses getSunGlassById(Integer sunGlassId) throws IdNotFoundException {
-		SunGlasses sunGlass = sunGlassRepo.findById(sunGlassId).get();
-		if (sunGlass == null) {
-			throw new IdNotFoundException("Enter correct product Id");
-		}
+		
+		try{
+			SunGlasses sunGlass = sunGlassRepo.findById(sunGlassId).get();
 		return sunGlass;
+		}
+		catch(Exception e)
+		{
+			throw new IdNotFoundException("Id is not Present");
+		}
 	}
 
 	@Override

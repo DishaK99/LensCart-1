@@ -21,14 +21,18 @@ public class GlassService implements IGlassService {
 
 	@Override
 	public Glass addGlass(Glass glass) throws InvalidProductDataException {
-		if(glass.getType().equals("zero power") || glass.getType().equals("digital screen protection")
+		 if (glass.getPrice() <= 0) {
+				throw new InvalidProductDataException("Product price should be greater than 0");
+			}
+		else if(glass.getType().equals("zero power") || glass.getType().equals("digital screen protection")
 				|| glass.getType().equals("single vision") || glass.getType().equals("bifocal powered glass"))
 		{
 			return glassRepo.save(glass);
 		}
+		
 		else
 		{
-		throw new InvalidProductDataException("Please Enter Valid Type");
+			throw new InvalidProductDataException("Please Enter Zero power/digital screen protection/single vision/bifocal powered glass");
 		}
 	}
 
@@ -38,23 +42,47 @@ public class GlassService implements IGlassService {
 	}
 
 	@Override
-	public Glass getGlassById(Integer glassId) throws IdNotFoundException {
+	public Glass getGlassById(int glassId) throws IdNotFoundException {
 		
-		if()
+		
+		try
 		{
-			throw new IdNotFoundException(" ");
+			Glass glass = glassRepo.findById(glassId).get();
+			return glass;
+			
+		}catch (Exception e) {
+			throw new IdNotFoundException("Id is not Present ");
 		}
 		
-		return glassRepo.findById(glassId).get();
+		
 	}
 
-	public void deleteGlass(Integer glassId) {
+	public List<Glass> deleteGlass(int glassId) throws IdNotFoundException {
+		try {
 		glassRepo.deleteById(glassId);
+		return glassRepo.findAll();
+		}
+		catch(Exception e)
+		{
+			throw new IdNotFoundException("Id is not Present ");
+		}
 		
 	}
 	
-	public Glass updateGlass(Glass glass)
+	public Glass updateGlass(Glass glass) throws InvalidProductDataException
 	{
-		return glassRepo.save(glass);
+		if (glass.getPrice() <= 0) {
+			throw new InvalidProductDataException("Product price should be greater than 0");
+		}
+		else if(glass.getType().equals("zero power") || glass.getType().equals("digital screen protection")
+				|| glass.getType().equals("single vision") || glass.getType().equals("bifocal powered glass"))
+		{
+			return glassRepo.save(glass);
+		}
+		 
+		else
+		{
+			throw new InvalidProductDataException("Please Enter Zero power/digital screen protection/single vision/bifocal powered glass");
+		}
 	}
 }
